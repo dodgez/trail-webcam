@@ -6,22 +6,24 @@ import time
 
 
 camera_port = 2  # Device to capture video from
-fps = 10  # FPS to record/playback at
-video_buffer = 3  # Time to pad on both sides of the video
-min_contour_area = 2000  # The minimum contour area to trigger recording
-output_folder = "./output/"  # Folder to output the videos
-show_cam = True  # Whether or not to show the realtime footage
+fps = 10  # FPS to record/playback
+min_contour_area = 2000  # Minimum contour area to trigger recording
+output_folder = "./output/"  # Folder to output videos
+refresh_time = 10  # Refresh time (in seconds) for comparison frame
+show_cam = True  # Show the realtime footage?
+video_buffer = 3  # Time (in seconds) to pad both sides of video
 
 
 if __name__ == '__main__':
     print("Starting up...")
     cam = cv2.VideoCapture(camera_port)
-    frame_buffer = video_buffer * fps  # Buffer the start of the video
-    buffer_timer = frame_buffer  # Timer to buffer the end of the video
+    frame_buffer = video_buffer * fps  # Start buffer frame count
+    buffer_timer = frame_buffer  # End buffer frame timer
     first_frame = None  # Comparison frame
     history = []  # Recorded frames
-    occupied = False  # Is the scene occupied
-    output_file = ""  # Placeholder for the output file path
+    occupied = False  # Scene occupied?
+    output_file = ""  # Placeholder for output file path
+    refresh_timer = 0  # Time since last comparison frame refresh
     print("Started.")
     try:
         while True:
@@ -82,6 +84,12 @@ if __name__ == '__main__':
                     break
             else:
                 time.sleep(1/fps)
+
+            refresh_timer += 1
+            if refresh_timer >= refresh_time*fps and not(occupied):
+                print("Refreshed background image")
+                refresh_timer = 0
+                first_frame = blur
     except KeyboardInterrupt:
         pass
     print("Cleaning up...")
