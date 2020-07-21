@@ -9,7 +9,7 @@ camera_port = 2  # Device to capture video from
 fps = 10  # FPS to record/playback
 min_contour_area = 2000  # Minimum contour area to trigger recording
 output_folder = "./output/"  # Folder to output videos
-refresh_time = 10  # Refresh time (in seconds) for comparison frame
+refresh_time = 600  # Refresh time (in seconds) for comparison frame
 show_cam = True  # Show the realtime footage?
 video_buffer = 3  # Time (in seconds) to pad both sides of video
 
